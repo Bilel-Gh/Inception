@@ -69,15 +69,13 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/Users/bilelgh/INCEPTION/data/mariadb'
-      #device: '/home/bghandri/data/mariadb'
+      device: '/home/bghandri/data/mariadb'
   wordpress:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/Users/bilelgh/INCEPTION/data/wordpress'
-      #device: '/home/bghandri/data/wordpress'
+      device: '/home/bghandri/data/wordpress'
 
 networks:
   inception:
