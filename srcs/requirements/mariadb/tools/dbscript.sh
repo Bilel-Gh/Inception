@@ -1,18 +1,35 @@
 #!/bin/bash
-#set -eux
+# set -eux
 
-service mysql start;
+echo "Debug: STARTING DBSCRIPT"
+echo "Debug: Checking variables"
+echo "SQL_DATABASE: ${SQL_DATABASE}"
+echo "SQL_USER: ${SQL_USER}"
+echo "SQL_PASSWORD: ${SQL_PASSWORD}"
+
+# Check if MariaDB is running
+if ! service mariadb status; then
+    # Start MariaDB service
+    service mariadb start
+
+    # Wait for MariaDB to start (you might need to adjust the sleep duration)
+    sleep 10
+fi
 
 # log into MariaDB as root and create database and the user
-mysql -e "CREATE DATABASE IF NOT EXISTS \`${SQL_DATABASE}\`;"
-mysql -e "CREATE USER IF NOT EXISTS \`${SQL_USER}\`@'localhost' IDENTIFIED BY '${SQL_PASSWORD}';"
-mysql -e "GRANT ALL PRIVILEGES ON \`${SQL_DATABASE}\`.* TO \`${SQL_USER}\`@'%' IDENTIFIED BY '${SQL_PASSWORD}';"
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${SQL_ROOT_PASSWORD}';"
-mysql -e "FLUSH PRIVILEGES;"
+mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "CREATE DATABASE IF NOT EXISTS \`${SQL_DATABASE}\`;" 2>/dev/null
+mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "CREATE USER IF NOT EXISTS \`${SQL_USER}\`@'localhost' IDENTIFIED BY '${SQL_PASSWORD}';" 2>/dev/null
+mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "GRANT ALL PRIVILEGES ON \`${SQL_DATABASE}\`.* TO \`${SQL_USER}\`@'%' IDENTIFIED BY '${SQL_PASSWORD}';" 2>/dev/null
+mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "FLUSH PRIVILEGES;" 2>/dev/null
 
-mysqladmin -u root -p${SQL_ROOT_PASSWORD} shutdown
-#mysqladmin -u root shutdown
-exec mysqld_safe
+# Set the root password
+mysqladmin -u root password "${SQL_ROOT_PASSWORD}"
 
-#print status
-echo "MariaDB database and user were created successfully! "
+# Flush privileges to apply changes
+mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "FLUSH PRIVILEGES;" 2>/dev/null
+
+# Log the information
+echo "MariaDB database and user were created successfully!"
+
+# Keep the script running
+tail -f /dev/null

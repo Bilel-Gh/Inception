@@ -1,5 +1,5 @@
 # use debian as the base image
-FROM debian:buster
+FROM debian:bullseye
 
 # install MariaDB and other dependencies
 RUN apt-get update -y

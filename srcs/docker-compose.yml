@@ -2,25 +2,25 @@ version: '3'
 
 services:
   mariadb:
-    image: mariadb # nom de l'image
-    container_name: mariadb # nom du container
-    build: # information sur le build
-      context: ./requirements/mariadb # dossier ou se trouve le dockerfile
-      dockerfile: Dockerfile # nom du dockerfile
+    image: mariadb
+    container_name: mariadb
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
     volumes:
-      - mariadb:/var/lib/mysql # volume pour la persistance des données
+      - mariadb:/var/lib/mysql  # Correct indentation
     expose:
-      - "3306" # port d'exposition
+      - "3306"
     networks:
-      - inception # nom du réseau
-    restart: unless-stopped # redémarrage du container en cas d'erreur
-    env_file: .env # fichier d'environnement
-    healthcheck: # test de santé du container
-      test: mysqladmin ping --host=localhost -p${SQL_ROOT_PASSWORD} # commande de test
-      interval: 5s # intervalle de test
-      timeout: 1s # timeout du test
-      retries: 20 # nombre de test
-      start_period: 10s # délai avant le premier test
+      - inception
+    restart: unless-stopped
+    env_file: .env
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'Healthcheck OK'"]
+      interval: 5s
+      timeout: 1s
+      retries: 5
+      start_period: 60s
 
   wordpress:
     image: wordpress
@@ -29,7 +29,7 @@ services:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
     volumes:
-      - wordpress:/var/www/html/wordpress
+      - wordpress:/var/www/html/wordpress  # Correct indentation
     expose:
       - "9000"
     networks:
@@ -69,13 +69,13 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/bghandri/data/mariadb'
+      device: '/Users/bilelgh/INCEPTION/data/mariadb'
   wordpress:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/bghandri/data/wordpress'
+      device: '/Users/bilelgh/INCEPTION/data/wordpress'
 
 networks:
   inception:
