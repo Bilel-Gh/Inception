@@ -1,12 +1,6 @@
 #!/bin/bash
 # set -eux
 
-echo "Debug: STARTING DBSCRIPT"
-echo "Debug: Checking variables"
-echo "SQL_DATABASE: ${SQL_DATABASE}"
-echo "SQL_USER: ${SQL_USER}"
-echo "SQL_PASSWORD: ${SQL_PASSWORD}"
-
 # Check if MariaDB is running
 if ! service mariadb status; then
     # Start MariaDB service
@@ -20,6 +14,7 @@ fi
 mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "CREATE DATABASE IF NOT EXISTS \`${SQL_DATABASE}\`;" 2>/dev/null
 mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "CREATE USER IF NOT EXISTS \`${SQL_USER}\`@'localhost' IDENTIFIED BY '${SQL_PASSWORD}';" 2>/dev/null
 mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "GRANT ALL PRIVILEGES ON \`${SQL_DATABASE}\`.* TO \`${SQL_USER}\`@'%' IDENTIFIED BY '${SQL_PASSWORD}';" 2>/dev/null
+mysql -e "GRANT ALL PRIVILEGES ON *.* TO root@localhost IDENTIFIED BY '12345';" 2>/dev/null
 mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "FLUSH PRIVILEGES;" 2>/dev/null
 
 # Set the root password
@@ -31,5 +26,5 @@ mysql -u root --password="${SQL_ROOT_PASSWORD}" -e "FLUSH PRIVILEGES;" 2>/dev/nu
 # Log the information
 echo "MariaDB database and user were created successfully!"
 
-# Keep the script running
-tail -f /dev/null
+# # Keep the script running
+# tail -f /dev/null
