@@ -16,11 +16,11 @@ services:
     restart: unless-stopped
     env_file: .env
     healthcheck:
-      test: ["CMD-SHELL", "echo 'Healthcheck OK'"]
+      test: 'mysqladmin ping -h localhost -u root -p${SQL_ROOT_PASSWORD}'
       interval: 5s
       timeout: 1s
-      retries: 5
-      start_period: 60s
+      retries: 10
+      start_period: 5s
 
   wordpress:
     image: wordpress

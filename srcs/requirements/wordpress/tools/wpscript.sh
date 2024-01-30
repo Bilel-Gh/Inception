@@ -3,13 +3,6 @@
 
 cd /var/www/html/wordpress
 
-echo "Debug: Checking variables"
-echo "SQL_DATABASE: ${SQL_DATABASE}"
-echo "SQL_USER: ${SQL_USER}"
-echo "SQL_PASSWORD: ${SQL_PASSWORD}"
-echo "SQL_HOST: ${SQL_HOST}"
-echo "DOMAIN_NAME: ${DOMAIN_NAME}"
-
 # Set the correct ownership and permissions
 chown -R www-data:www-data /var/www/html/wordpress
 chmod -R 755 /var/www/html/wordpress
@@ -47,9 +40,6 @@ if ! wp core is-installed --allow-root; then
         --user_pass=${USER1_PASS}
 
     wp cache flush --allow-root
-
-    # Install Contact Form 7 plugin
-    wp plugin install contact-form-7 --activate --allow-root
 
     # Set the site language to French
     wp language core install fr_FR --activate --allow-root
